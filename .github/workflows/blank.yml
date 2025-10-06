@@ -30,13 +30,13 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      - name: Wyswietl listę plikow
-        run: ls -a
+      #- name: Wyswietl listę plikow
+        #run: ls -a
 
-      - name: Setup Python
-        uses: actions/setup-python@v6.0.0
-        with:
-          python-version: '3.13.7'
+      #- name: Setup Python
+        #uses: actions/setup-python@v6.0.0
+        #with:
+          #python-version: '3.13.7'
     
-      - name: Sprawdzamy wersję Python
-        run: python -V        
+      #- name: Sprawdzamy wersję Python
+        #run: python -V        
