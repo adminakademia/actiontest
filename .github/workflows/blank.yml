@@ -18,8 +18,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
-      - name: Sprawdzamy wersję Python
-        run: python -V
+      #- name: Sprawdzamy wersję Python
+        #run: python -V
 
       - name: Wyswietl aktualny katalog roboczy
         run: pwd
