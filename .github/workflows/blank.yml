@@ -9,6 +9,23 @@ name: Moj pierwszy przeplyw
 #    - cron: '*/2 * * * *'
 on:
   workflow_dispatch:
+    inputs:  
+	  WyborKlienta:
+	    description: 'Nasz Klient'
+		# że jest to wymagane:
+		required: true
+		# domyślnie będzie wartość
+		defaults: "Contoso"
+		# to pole to ma być lista rozwijana:
+		type: choice
+		# a jak lista, to coś musi być do wyboru:
+		  - Contoso
+		  - Arcacorp
+		  - Nwtraders
+	  nazwa_operatora:
+	    description: "Twoje imie i i nazwisko"
+		required: false
+		type: string
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -41,4 +58,12 @@ jobs:
           #python-version: '3.13.7'
     
       #- name: Sprawdzamy wersję Python
-        #run: python -V        
+        #run: python -V     
+
+      - name: Testujemy zmienne input
+	      run: |
+		      echo "Wybrany klient to: $Klient"
+		      echo "Wskazany operator to: $Operator"
+		    env:
+		      Klient: ${{ inputs.WyborKlienta }}
+		      Operator: ${{ inputs.nazwa_operatora }}
