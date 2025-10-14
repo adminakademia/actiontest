@@ -14,7 +14,6 @@ on:
        description: 'Nasz Klient'
        required: true
        default: "Contoso"
-		# to pole to ma być lista rozwijana:
        type: choice
           - Contoso
           - Arcacorp
