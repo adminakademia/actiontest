@@ -31,6 +31,16 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    env:
+      # --- USTAWIENIA NFTABLES ---
+      NFT_FILE: nftables-1.0.6.1.tar.xz
+      NFT_URL: https://www.netfilter.org/projects/nftables/files/nftables-1.0.6.1.tar.xz
+      # katalog trzymany w cache (względem workspace)
+      NFT_DIR: ${{ github.workspace }}/.cache/nftables
+      # klucz cache; zmień przy aktualizacji wersji/URL
+      NFT_CACHE_KEY: nftables-1.0.6.1-${{ runner.os }}
+
+      
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
