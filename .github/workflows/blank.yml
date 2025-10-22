@@ -42,13 +42,6 @@ jobs:
 
       - name: Wyswietl listę plikow
         run: ls -la
-
-      - name: Konfiguracja cache
-        uses: actions/cache@v4.3.0
-        with:
-          path: "*nftables*"
-          key: ${{ runner.os }}-nftables
-          restore-keys: ${{ runner.os }}-nftables
   
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -74,7 +67,7 @@ jobs:
       # 2) Przywróć/zarezerwuj cache pliku
       - name: Przywróć cache nftables
         id: cache_nftables
-        uses: actions/cache@v4
+        uses: actions/cache@v4.3.0
         with:
           path: nftables-1.0.6.1.tar.xz
           key: nftables-${{ steps.get_nftables_key.outputs.revision }}
