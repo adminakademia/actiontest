@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  testy_warunku:
     runs-on: ubuntu-latest
     steps:
       - name: Wyswietl podstawowe informacje
@@ -37,3 +37,11 @@ jobs:
       - name: Uruchom po sukcesie
         if: success()
         run: echo "Zawsze"
+  
+  drugie_zadanie:
+    runs-on: ubuntu-latest
+    needs: testy_warunku
+    if: always()
+    steps:
+      - name: Drugie zadanie
+        run: echo "Drugie zadanie wykonane"
