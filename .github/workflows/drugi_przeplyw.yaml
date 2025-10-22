@@ -20,7 +20,7 @@ jobs:
 
       - name: Wyswietl informacje jesli jadro jest 6.x
         if: startsWith(steps.jadro_kroku.outputs.KERNEL, '6.')
-        run: echo "Wykryto jadro 6.x: warunkowy step zostal wykonany!"
+        run: echo "Wykryto jadro 6.x - warunkowy step zostal wykonany!"
 
       - name: Inny komunikat dla innego jadra
         if: ${{ !startsWith(steps.jadro_kroku.outputs.KERNEL, '6.') }}
