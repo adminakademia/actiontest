@@ -54,8 +54,37 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      - name: Pobierz źródła iptables
-        run: wget https://www.netfilter.org/projects/nftables/files/nftables-1.0.6.1.tar.xz
+      - name: Ustal klucz cache dla nftables
+        id: get_nftables_key
+        run: |
+          URL="https://www.netfilter.org/projects/nftables/files/nftables-1.0.6.1.tar.xz"
+          # Pobierz tylko nagłówki; wybierz ETag/Last-Modified, usuń CR
+          META_HEADERS=$(curl -sI "$URL" | grep -iE '^(ETag|Last-Modified):' | tr -d '\r')
+          echo "== Nagłówki do klucza =="
+          echo "$META_HEADERS"
+          # Zrób skrót SHA256 nagłówków jako 'revision'
+          REVISION=$(printf '%s' "$META_HEADERS" | sha256sum | cut -d' ' -f1)
+          # Fallback gdyby serwer nie wystawił nagłówków (rzadkie)
+          if [ -z "$REVISION" ]; then
+            REVISION="noheaders-$(date +%Y%m%d)"
+          fi
+          echo "revision=$REVISION" >> "$GITHUB_OUTPUT"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      # 2) Przywróć/zarezerwuj cache pliku
+      - name: Przywróć cache nftables
+        id: cache_nftables
+        uses: actions/cache@v4
+        with:
+          path: nftables-1.0.6.1.tar.xz
+          key: nftables-${{ steps.get_nftables_key.outputs.revision }}
+
+      # 3) Pobierz plik tylko gdy cache nie został trafiony
+      - name: Pobierz źródła nftables (gdy cache-miss)
+        if: steps.cache_nftables.outputs.cache-hit != 'true'
+        run: |
+          wget -O nftables-1.0.6.1.tar.xz "${{ steps.get_nftables_key.outputs.url }}"
+          ls -lh nftables-1.0.6.1.tar.xz
 
       
       - name: Wyswietl listę plikow
