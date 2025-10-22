@@ -44,7 +44,7 @@ jobs:
         run: ls -la
 
       - name: Pobierz źródła iptables
-        run: wget https://www.netfilter.org/projects/iptables/files/iptables-latest.tar.xz
+        run: wget https://www.netfilter.org/projects/nftables/files/nftables-1.0.6.1.tar.xz
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
