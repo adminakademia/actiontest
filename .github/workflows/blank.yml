@@ -34,33 +34,28 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
-      #- name: Sprawdzamy wersję Python
-        #run: python -V
+      - name: Sprawdzamy wersję Python
+        run: python3 -V
 
       - name: Wyswietl aktualny katalog roboczy
         run: pwd
 
       - name: Wyswietl listę plikow
-        run: ls -a
-        
+        run: ls -la
+
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      #- name: Wyswietl listę plikow
-        #run: ls -a
+      - name: Wyswietl listę plikow
+        run: ls -la
 
-      #- name: Setup Python
-        #uses: actions/setup-python@v6.0.0
-        #with:
-          #python-version: '3.13.7'
-    
-      #- name: Sprawdzamy wersję Python
-        #run: python -V     
-
-      - name: Testujemy zmienne input
+      - name: testujemy zmienne input
         run: |
-          echo "Wybrany klient to: $Klient"
-          echo "Wskazany operator to: $Operator"
+          echo "Wybrałeś klienta: $KLIENT"
+          echo "Podane imię i nazwisko: ${{ inputs.nazwa_operatora }}"
         env:
-          Klient: ${{ inputs.WyborKlienta }}
-          Operator: ${{ inputs.nazwa_operatora }}
+          KLIENT: ${{ inputs.wybor_klienta }}
+
+
+
