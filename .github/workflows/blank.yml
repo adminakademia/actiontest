@@ -47,11 +47,15 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      - name: Wyswietl listę plikow
+      - name: Tworzenie zmiennej z wersją jadra systemu operacyjnego
         run: |
-         JADRO = 'uname -a'
+         JADRO=$(uname -a)
          echo "Jadro w systemie to $JADRO"
-     
+
+      - name: Wyswietl zawartosc zmiennej jadro
+        run: "Jadro w systemie to $JADRO"
+
+        
       - name: Wyswietl listę plikow
         run: ls -lRa
 
