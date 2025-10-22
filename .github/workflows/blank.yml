@@ -31,15 +31,12 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    # Zmienne środowiskowe dla kroków w jobie
     env:
-      # --- USTAWIENIA NFTABLES ---
-      NFT_FILE: nftables-1.0.6.1.tar.xz
       NFT_URL: https://www.netfilter.org/projects/nftables/files/nftables-1.0.6.1.tar.xz
-      # katalog trzymany w cache (względem workspace)
-      NFT_DIR: ${{ github.workspace }}/.cache/nftables
-      # klucz cache; zmień przy aktualizacji wersji/URL
-      NFT_CACHE_KEY: nftables-1.0.6.1-${{ runner.os }}
-
+      NFT_DIR: downloads
+      NFT_FILE: nftables-1.0.6.1.tar.xz
+      NFT_KEY_FILE: downloads/nftables.url
       
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -58,35 +55,43 @@ jobs:
       - uses: actions/checkout@v4
 
 
-      # ====== CACHE NFTABLES ======
-      - name: Przygotuj katalog cache
-        run: mkdir -p "$NFT_DIR"
+ # --- CACHE NFTABLES ---
+      # Tworzymy katalog na pliki i zapisujemy URL do pliku,
+      # który posłuży jako "materiał do hashowania" dla klucza cache.
+      - name: Przygotuj katalog i plik z URL do klucza cache
+        run: |
+          mkdir -p "$NFT_DIR"
+          echo "$NFT_URL" > "$NFT_KEY_FILE"
+          echo "Klucz cache będzie bazował na zawartości: $NFT_KEY_FILE"
 
-      - name: Przywróć cache dla nftables
+      # Przywrócenie/zapis cache dla pliku .tar.xz
+      # Gdy URL się zmieni, zmieni się hash pliku z URL, więc utworzy się nowy cache.
+      - name: Przywróć/zapisz cache dla nftables
         id: cache-nft
-        uses: actions/cache@v4
+        uses: actions/cache@v4.3.0
         with:
-          path: .cache/nftables
-          key: ${{ env.NFT_CACHE_KEY }}
-          restore-keys: |
-            nftables-
+          path: ${{ env.NFT_DIR }}/nftables-1.0.6.1.tar.xz
+          key: nftables-${{ runner.os }}-${{ hashFiles(env.NFT_KEY_FILE) }}
+          # Możesz dodać restore-keys, jeśli chcesz fallback do starszych wersji:
+          # restore-keys: |
+          #   nftables-${{ runner.os }}-
 
+      # Pobranie pliku tylko, jeśli nie było trafienia w cache.
       - name: Pobierz nftables (jeśli brak w cache)
         if: steps.cache-nft.outputs.cache-hit != 'true'
         run: |
-          echo "Cache miss – pobieram: $NFT_URL"
+          echo "Brak trafienia w cache — pobieram z: $NFT_URL"
           curl -fL "$NFT_URL" -o "$NFT_DIR/$NFT_FILE"
-          echo "Pobrano: $NFT_DIR/$NFT_FILE"
           ls -lh "$NFT_DIR"
 
-      - name: Potwierdź plik w cache
+      # (Opcjonalnie) Zweryfikuj, że plik jest na miejscu i wypisz parę informacji
+      - name: Sprawdź plik i rozmiar
         run: |
-          test -f "$NFT_DIR/$NFT_FILE" || { echo "Brak $NFT_FILE po próbie pobrania!"; exit 1; }
-          echo "Plik w cache OK:"
+          test -f "$NFT_DIR/$NFT_FILE"
+          echo "Plik istnieje:"
           ls -lh "$NFT_DIR/$NFT_FILE"
-          
-
       
+     
       - name: Wyswietl listę plikow
         run: ls -lRa
 
