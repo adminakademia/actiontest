@@ -48,13 +48,15 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Tworzenie zmiennej z wersją jadra systemu operacyjnego
+        id: zmienna_jadro
         run: |
          JADRO=$(uname -a)
          echo "Jadro w systemie to $JADRO"
 
       - name: Wyswietl zawartosc zmiennej jadro
-        run: "Jadro w systemie to $JADRO"
-
+        run: "Jadro w systemie to $wersja_jadro"
+        env:
+          wersja_jadro: ${{ steps.zmienna_jadro.outputs.JADRO }}
         
       - name: Wyswietl listę plikow
         run: ls -lRa
