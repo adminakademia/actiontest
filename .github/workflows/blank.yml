@@ -47,37 +47,34 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      - name: Ustal klucz cache dla nftables
-        id: get_nftables_key
-        run: |
-          URL="https://www.netfilter.org/projects/nftables/files/nftables-1.0.6.1.tar.xz"
-          # Pobierz tylko nagłówki; wybierz ETag/Last-Modified, usuń CR
-          META_HEADERS=$(curl -sI "$URL" | grep -iE '^(ETag|Last-Modified):' | tr -d '\r')
-          echo "== Nagłówki do klucza =="
-          echo "$META_HEADERS"
-          # Zrób skrót SHA256 nagłówków jako 'revision'
-          REVISION=$(printf '%s' "$META_HEADERS" | sha256sum | cut -d' ' -f1)
-          # Fallback gdyby serwer nie wystawił nagłówków (rzadkie)
-          if [ -z "$REVISION" ]; then
-            REVISION="noheaders-$(date +%Y%m%d)"
-          fi
-          echo "revision=$REVISION" >> "$GITHUB_OUTPUT"
-          echo "url=$URL" >> "$GITHUB_OUTPUT"
 
-      # 2) Przywróć/zarezerwuj cache pliku
-      - name: Przywróć cache nftables
-        id: cache_nftables
-        uses: actions/cache@v4.3.0
+      # ====== CACHE NFTABLES ======
+      - name: Przygotuj katalog cache
+        run: mkdir -p "$NFT_DIR"
+
+      - name: Przywróć cache dla nftables
+        id: cache-nft
+        uses: actions/cache@v4
         with:
-          path: nftables-1.0.6.1.tar.xz
-          key: nftables-${{ steps.get_nftables_key.outputs.revision }}
+          path: .cache/nftables
+          key: ${{ env.NFT_CACHE_KEY }}
+          restore-keys: |
+            nftables-
 
-      # 3) Pobierz plik tylko gdy cache nie został trafiony
-      - name: Pobierz źródła nftables (gdy cache-miss)
-        if: steps.cache_nftables.outputs.cache-hit != 'true'
+      - name: Pobierz nftables (jeśli brak w cache)
+        if: steps.cache-nft.outputs.cache-hit != 'true'
         run: |
-          wget -O nftables-1.0.6.1.tar.xz "${{ steps.get_nftables_key.outputs.url }}"
-          ls -lh nftables-1.0.6.1.tar.xz
+          echo "Cache miss – pobieram: $NFT_URL"
+          curl -fL "$NFT_URL" -o "$NFT_DIR/$NFT_FILE"
+          echo "Pobrano: $NFT_DIR/$NFT_FILE"
+          ls -lh "$NFT_DIR"
+
+      - name: Potwierdź plik w cache
+        run: |
+          test -f "$NFT_DIR/$NFT_FILE" || { echo "Brak $NFT_FILE po próbie pobrania!"; exit 1; }
+          echo "Plik w cache OK:"
+          ls -lh "$NFT_DIR/$NFT_FILE"
+          
 
       
       - name: Wyswietl listę plikow
