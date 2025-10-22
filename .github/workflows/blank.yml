@@ -54,7 +54,7 @@ jobs:
          echo "Jadro w systemie to $JADRO"
 
       - name: Wyswietl zawartosc zmiennej jadro
-        run: "Jadro w systemie to $wersja_jadro"
+        run: echo "Jadro w systemie to $wersja_jadro"
         env:
           wersja_jadro: ${{ steps.zmienna_jadro.outputs.JADRO }}
         
