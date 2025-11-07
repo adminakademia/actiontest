@@ -19,6 +19,8 @@ jobs:
       - name: Test sekretu srodowiska
         run: echo "Sekret srodowiska to ${{ secrets.sekret_srodowiska }}"     
       
+      - uses: actions/checkout@v4
+      
       - name: Odszyfrowanie pliku
         run: |
           mkdir $HOME/secrets
