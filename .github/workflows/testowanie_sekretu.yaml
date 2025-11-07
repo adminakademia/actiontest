@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Test sekrestu produkcyjnego
-        run: echo "Sekret produkcyjny to: ${{ secrets.Testowy_sekret_repo }}"
+        run: echo "Sekret produkcyjny to ${{ secrets.Testowy_sekret_repo }}"
         
       - name: Test sekrestu środowiskowego
-        run: echo "Sekret produkcyjny to: ${{ secrets.Testowy_sekrest_srodowiska_prod}}"
+        run: echo "Sekret srodowiskowy to ${{ secrets.Testowy_sekrest_srodowiska_prod}}"
