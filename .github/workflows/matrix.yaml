@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]  # Lista systemów operacyjnych do testowania
-        python-version: [3.1, 3.9, 3.10]  # Lista wersji Pythona do testowania
+        python-version: [3.14, 3.9, 3.1]  # Lista wersji Pythona do testowania
 
     steps:
       - uses: actions/checkout@v3  # Pobranie zawartości repozytorium git
