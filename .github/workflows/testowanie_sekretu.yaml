@@ -12,4 +12,4 @@ jobs:
         run: echo "Sekret repozytorium to ${{ secrets.Testowy_sekret_repo }}"
         
       - name: Test zmiennej repozytorium
-        run: echo "Zmienna repozytorium to $Testowa_zmienna_repo"
+        run: echo "Zmienna repozytorium to ${{ vars.$Testowa_zmienna_repo }}"
