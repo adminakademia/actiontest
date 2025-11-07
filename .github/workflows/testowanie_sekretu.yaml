@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test sekrestu produkcyjnego
-        run: echo "Sekret produkcyjny to ${{ secrets.Testowy_sekret_repo }}"
+      - name: Test sekrestu repozytorium
+        run: echo "Sekret repozytorium to ${{ secrets.Testowy_sekret_repo }}"
         
-      - name: Test sekrestu środowiskowego
-        run: echo "Sekret srodowiskowy to ${{ secrets.Testowy_sekrest_srodowiska_prod}}"
+      - name: Test zmiennej repozytorium
+        run: echo "Zmienna repozytorium to ${{ secrets.Testowa_zmienna_repo}}"
