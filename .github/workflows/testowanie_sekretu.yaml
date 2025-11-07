@@ -1,0 +1,15 @@
+name: Testowanie sekretu
+
+on:
+  workflow_dispatch:
+
+jobs:
+  testy_sekretu:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test sekrestu produkcyjnego
+        run: echo "Sekret produkcyjny to: ${{ secrets.Testowy_sekret_repo }}"
+        
+      - name: Test sekrestu środowiskowego
+        run: echo "Sekret produkcyjny to: ${{ secrets.Testowy_sekrest_srodowiska_prod}}"
