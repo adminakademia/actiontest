@@ -1,30 +1,30 @@
-name: Test matrix example
+name: Test matrix example  # Nazwa przepływu
 
 on:
   push:
     branches:
-      - main
+      - main  # Przepływu uruchamiany przy dodaniu punktu kontrolnego na gałąź "main"
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}  # Uruchom zadanie na systemie zdefiniowanym w macierzy matrix
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [3.8, 3.9, 3.10]
+        os: [ubuntu-latest, windows-latest, macos-latest]  # Lista systemów operacyjnych do testowania
+        python-version: [3.1, 3.9, 3.10]  # Lista wersji Pythona do testowania
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3  # Pobranie zawartości repozytorium git
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}  # Ustawienie wersji Pythona dla bieżącej kombinacji matrixa
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python-version }}  # Wersja Pythona określona w matrixie
 
-      - name: Show environment info
+      - name: Show environment info  # Wyświetlenie wersji Pythona i informacji o systemie
         run: |
-          python --version
-          uname -a || systeminfo
+          python --version  # Pokazuje zainstalowaną wersję Pythona
+          uname -a || systeminfo  # Pokazuje szczegóły systemu na Linux/Mac lub Windows
 
-      - name: Run tests
+      - name: Run tests  # Przykładowe uruchomienie testów - tu tylko echo z informacją
         run: echo "Uruchamiam testy na Pythonie ${{ matrix.python-version }} na systemie ${{ matrix.os }}"
